@@ -84,7 +84,7 @@ The details of how to build it are described below (easy to follow).
 ### Donations accepted
 At the present time this project is non-commercial in nature and developed by volunteers. If you find the GUI
 Wallet useful, please consider making a donation for its further development. Your contribution matters! Donations 
-are accepted at ZClassic T address:
+are accepted at ZClassic Z address:
 ```
 zcaTKUNkohUgYj3C5bTapCKRk7JZapPfvCUj7GGBUWuBikx4sWEs5KSyd93b9jnjJnbDxnApyXyfeG482iJ5HzoC7cz6oob
 ```
