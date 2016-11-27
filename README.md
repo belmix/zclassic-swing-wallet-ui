@@ -58,7 +58,7 @@ The details of how to build it are described below (easy to follow).
 
 3. Installing the built ZClassic GUI wallet
 
-  3.1. If you have built ZClassic from source code:
+   3.1. If you have built ZClassic from source code:
 
    Assuming you have already built from source code [ZClassic](http://zclassic.org) in directory `/home/user/zclassic/src` (for 
    example - this is the typical build dir. for ZClassic v1.0.0) which contains the command line tools `zcash-cli` 
@@ -66,6 +66,7 @@ The details of how to build it are described below (easy to follow).
    to diretcory `/home/user/zclassic/src` (the same dir. that contains `zcash-cli` and `zcashd`). Example copy command:
    ```
    user@ubuntu:~/build-dir/zclassic-swing-wallet-ui$ cp ./build/jars/ZClassicSwingWalletUI.jar /home/user/zclassic/src    
+   ```
 
 4. Running the installed ZClassic GUI wallet
 
