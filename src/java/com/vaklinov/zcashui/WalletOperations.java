@@ -258,7 +258,7 @@ public class WalletOperations
 				f.getName() + "\n" +
 				"in the backup directory provided to zcashd (-exportdir=<dir>).\n" +
 				"You need to protect this file from unauthorized access. Anyone who\n" +
-				"has access to the private keys can spend the ZCash balance!",
+				"has access to the private keys can spend the ZCL balance!",
 				"Wallet private key export...", JOptionPane.INFORMATION_MESSAGE);
 			
 		} catch (Exception e)
