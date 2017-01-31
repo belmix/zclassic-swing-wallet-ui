@@ -59,7 +59,7 @@ public class StartupProgressDialog extends JFrame {
         southPanel.setBorder(BorderFactory.createEmptyBorder(0, 16, 16, 16));
         contentPane.add(imageLabel, BorderLayout.NORTH);
 		JLabel zcashWalletLabel = new JLabel(
-			"<html><span style=\"font-style:italic;font-weight:bold;font-size:25px\">" + 
+			"<html><span style=\"font-style:italic;font-weight:bold;font-size:21px\">" + 
 		    "ZClassic Wallet</span></html>");
 		zcashWalletLabel.setBorder(BorderFactory.createEmptyBorder(16, 16, 16, 16));
 		contentPane.add(zcashWalletLabel, BorderLayout.CENTER);
