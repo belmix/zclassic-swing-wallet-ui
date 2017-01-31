@@ -50,6 +50,7 @@ import javax.swing.JTable;
 import javax.swing.Timer;
 import javax.swing.border.EtchedBorder;
 
+import com.vaklinov.zcashui.OSUtil.OS_TYPE;
 import com.vaklinov.zcashui.ZCashClientCaller.WalletCallException;
 
 
@@ -59,7 +60,7 @@ import com.vaklinov.zcashui.ZCashClientCaller.WalletCallException;
  * @author Ivan Vaklinov <ivan@vaklinov.com>
  */
 public class AddressesPanel
-	extends JPanel
+	extends WalletTabPanel
 {
 	private ZCashClientCaller clientCaller;
 	private StatusUpdateErrorReporter errorReporter;
@@ -138,6 +139,7 @@ public class AddressesPanel
 				}
 			}, 
 			this.errorReporter, 25000);
+		this.threads.add(this.balanceGatheringThread);
 		
 		ActionListener alBalances = new ActionListener() 
 		{
@@ -156,6 +158,7 @@ public class AddressesPanel
 		};
 		Timer t = new Timer(5000, alBalances);
 		t.start();
+		this.timers.add(t);
 		
 		// Button actions
 		refreshButton.addActionListener(new ActionListener() 
@@ -357,6 +360,18 @@ public class AddressesPanel
 		// Format double numbers - else sometimes we get exponential notation 1E-4 ZEC
 		DecimalFormat df = new DecimalFormat("########0.00######");
 		
+		String confirmed    = "\u2690";
+		String notConfirmed = "\u2691";
+		
+		// Windows does not support the flag symbol (Windows 7 by default)
+		// TODO: isolate OS-specific symbol codes in a separate class
+		OS_TYPE os = OSUtil.getOSType();
+		if (os == OS_TYPE.WINDOWS)
+		{
+			confirmed = " \u25B7";
+			notConfirmed = " \u25B6";
+		}
+		
 		int i = 0;
 
 		for (String address : tAddressesCombined)
@@ -370,7 +385,7 @@ public class AddressesPanel
 			addressBalances[i++] = new String[] 
 			{  
 				balanceToShow,
-				isConfirmed ? "Yes \u2690" : "No  \u2691",
+				isConfirmed ? ("Yes " + confirmed) : ("No  " + notConfirmed),
 				address
 			};
 		}
@@ -386,7 +401,7 @@ public class AddressesPanel
 			addressBalances[i++] = new String[] 
 			{  
 				balanceToShow,
-				isConfirmed ? "Yes \u2690" : "No  \u2691",
+				isConfirmed ? ("Yes " + confirmed) : ("No  " + notConfirmed),
 				address
 			};
 		}

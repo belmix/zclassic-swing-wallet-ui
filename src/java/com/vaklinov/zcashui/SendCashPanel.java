@@ -61,6 +61,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JProgressBar;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.Timer;
 import javax.swing.border.EtchedBorder;
 
@@ -68,12 +69,12 @@ import com.vaklinov.zcashui.ZCashClientCaller.WalletCallException;
 
 
 /**
- * ... for sending cash
+ * Provides the functionality for sending cash
  *
  * @author Ivan Vaklinov <ivan@vaklinov.com>
  */
 public class SendCashPanel
-	extends JPanel
+	extends WalletTabPanel
 {
 	private ZCashClientCaller clientCaller;
 	private StatusUpdateErrorReporter errorReporter;
@@ -87,6 +88,8 @@ public class SendCashPanel
 	private JTextField destinationAddressField = null;
 	private JTextField destinationAmountField  = null;
 	private JTextField destinationMemoField    = null;	
+	private JTextField transactionFeeField     = null;	
+	
 	private JButton    sendButton              = null;
 	
 	private JPanel       operationStatusPanel        = null;
@@ -96,10 +99,6 @@ public class SendCashPanel
 	private String       operationStatusID           = null;
 	private int          operationStatusCounter      = 0;
 	
-	// Lists of threads and timers that may be stopped if necessary
-	private List<Timer> timers                   = null;
-	private List<DataGatheringThread<?>> threads = null;	
-
 
 	public SendCashPanel(ZCashClientCaller clientCaller,  StatusUpdateErrorReporter errorReporter)
 		throws IOException, InterruptedException, WalletCallException
@@ -165,13 +164,28 @@ public class SendCashPanel
 		dividerLabel.setFont(new Font("Helvetica", Font.PLAIN, 3));
 		sendCashPanel.add(dividerLabel);
 
-		tempPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-		tempPanel.add(new JLabel("Amount to send:"));
-		sendCashPanel.add(tempPanel);
-
+		// Construct a more complex panel for the amount and transaction fee
+		JPanel amountAndFeePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+		JPanel amountPanel = new JPanel(new BorderLayout());
+		amountPanel.add(new JLabel("Amount to send:"), BorderLayout.NORTH);
 		tempPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
 		tempPanel.add(destinationAmountField = new JTextField(13));
-		sendCashPanel.add(tempPanel);
+		destinationAmountField.setHorizontalAlignment(SwingConstants.RIGHT);
+		tempPanel.add(new JLabel(" ZEC    "));
+		amountPanel.add(tempPanel, BorderLayout.SOUTH);
+
+		JPanel feePanel = new JPanel(new BorderLayout());
+		feePanel.add(new JLabel("Transaction fee:"), BorderLayout.NORTH);
+		tempPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+		tempPanel.add(transactionFeeField = new JTextField(13));
+		transactionFeeField.setText("0.0001"); // Default value
+		transactionFeeField.setHorizontalAlignment(SwingConstants.RIGHT);		
+		tempPanel.add(new JLabel(" ZEC"));
+		feePanel.add(tempPanel, BorderLayout.SOUTH);
+
+		amountAndFeePanel.add(amountPanel);
+		amountAndFeePanel.add(feePanel);
+		sendCashPanel.add(amountAndFeePanel);		
 		
 		dividerLabel = new JLabel("   ");
 		dividerLabel.setFont(new Font("Helvetica", Font.PLAIN, 3));
@@ -344,20 +358,6 @@ public class SendCashPanel
 	}
 	
 	
-	public void stopThreadsAndTimers()
-	{
-		for (Timer t : this.timers)
-		{
-			t.stop();
-		}
-		
-		for (DataGatheringThread<?> t : this.threads)
-		{
-			t.setSuspended(true);
-		}
-	}
-	
-	
 	private void sendCash()
 		throws WalletCallException, IOException, InterruptedException
 	{
@@ -385,6 +385,7 @@ public class SendCashPanel
 		final String destinationAddress = this.destinationAddressField.getText();
 		final String memo = this.destinationMemoField.getText();
 		final String amount = this.destinationAmountField.getText();
+		final String fee = this.transactionFeeField.getText();
 
 		// Verify general correctness.
 		String errorMessage = null;
@@ -422,6 +423,21 @@ public class SendCashPanel
 				errorMessage = "Amount to send is invalid; it is not a number.";				
 			}
 		}
+		
+		if ((fee == null) || (fee.trim().length() <= 0))
+		{
+			errorMessage = "Transaction fee is invalid; it is missing.";
+		} else 
+		{
+			try 
+			{
+				double d = Double.valueOf(fee);
+			} catch (NumberFormatException nfe)
+			{
+				errorMessage = "Transaction fee is invalid; it is not a number.";				
+			}
+		}
+
 
 		if (errorMessage != null)
 		{
@@ -447,7 +463,7 @@ public class SendCashPanel
 		}
 		
 		// Call the wallet send method
-		operationStatusID = this.clientCaller.sendCash(sourceAddress, destinationAddress, amount, memo);
+		operationStatusID = this.clientCaller.sendCash(sourceAddress, destinationAddress, amount, memo, fee);
 				
 		// Disable controls after send
 		sendButton.setEnabled(false);
@@ -455,6 +471,7 @@ public class SendCashPanel
 		destinationAddressField.setEnabled(false);
 		destinationAmountField.setEnabled(false);
 		destinationMemoField.setEnabled(false);
+		transactionFeeField.setEnabled(false);
 		
 		// Start a timer to update the progress of the operation
 		operationStatusCounter = 0;
@@ -473,7 +490,7 @@ public class SendCashPanel
 								"<html><span style=\"color:green;font-weight:bold\">SUCCESSFUL</span></html>");
 							JOptionPane.showMessageDialog(
 									SendCashPanel.this.getRootPane().getParent(), 
-									"Succesfully sent " + amount + " ZCL from address: \n" +
+									"Succesfully sent " + amount + " ZEC from address: \n" +
 									sourceAddress + "\n" +
 									"to address: \n" +
 									destinationAddress + "\n", 
@@ -510,6 +527,7 @@ public class SendCashPanel
 						balanceAddressCombo.setEnabled(true);
 						destinationAddressField.setEnabled(true);
 						destinationAmountField.setEnabled(true);
+						transactionFeeField.setEnabled(true);
 						destinationMemoField.setEnabled(true);
 					} else
 					{
@@ -540,7 +558,13 @@ public class SendCashPanel
 		operationStatusTimer.start();
 	}
 
-		
+	
+	public void prepareForSending(String address) 
+	{
+	    destinationAddressField.setText(address);
+	}
+	
+	
 	private void updateWalletAddressPositiveBalanceComboBox()
 		throws WalletCallException, IOException, InterruptedException
 	{

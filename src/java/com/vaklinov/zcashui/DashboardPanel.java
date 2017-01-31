@@ -66,7 +66,7 @@ import com.vaklinov.zcashui.ZCashInstallationObserver.DaemonInfo;
  * @author Ivan Vaklinov <ivan@vaklinov.com>
  */
 public class DashboardPanel
-	extends JPanel
+	extends WalletTabPanel
 {
 	private JFrame parentFrame;
 	private ZCashInstallationObserver installationObserver;
@@ -76,7 +76,8 @@ public class DashboardPanel
 	private JLabel networkAndBlockchainLabel = null;
 	private DataGatheringThread<NetworkAndBlockchainInfo> netInfoGatheringThread = null;
 
-	private Boolean walletIsEncrypted  = null;
+	private Boolean walletIsEncrypted   = null;
+	private Integer blockchainPercentage = null;
 	
 	private String OSInfo              = null;
 	private JLabel daemonStatusLabel   = null;
@@ -90,10 +91,6 @@ public class DashboardPanel
 	private String[][] lastTransactionsData = null;
 	private DataGatheringThread<String[][]> transactionGatheringThread = null;
 	
-	// Lists of threads and timers that may be stopped if necessary
-	private List<Timer> timers                   = null;
-	private List<DataGatheringThread<?>> threads = null;	
-
 
 	public DashboardPanel(JFrame parentFrame,
 			              ZCashInstallationObserver installationObserver,
@@ -318,17 +315,10 @@ public class DashboardPanel
 	}
 
 	
-	public void stopThreadsAndTimers()
+	// May be null!
+	public Integer getBlockchainPercentage()
 	{
-		for (Timer t : this.timers)
-		{
-			t.stop();
-		}
-		
-		for (DataGatheringThread<?> t : this.threads)
-		{
-			t.setSuspended(true);
-		}
+		return this.blockchainPercentage;
 	}
 	
 
@@ -349,11 +339,25 @@ public class DashboardPanel
 			daemonStatus = "<span style=\"color:red;font-weight:bold\">NOT RUNNING</span>";
 		}
 		String runtimeInfo = "";
+		
+		// If the virtual size/CPU are 0 - do not show them
+		String virtual = "";
+		if (daemonInfo.virtualSizeMB > 0)
+		{
+			virtual = ", Virtual: " + daemonInfo.virtualSizeMB + " MB";
+		}
+		
+		String cpuPercentage = "";
+		if (daemonInfo.cpuPercentage > 0)
+		{
+			cpuPercentage = ", CPU: " + daemonInfo.cpuPercentage + "%";
+		}
+		
 		if (daemonInfo.status == DAEMON_STATUS.RUNNING)
 		{
 			runtimeInfo = "<span style=\"font-size:8px\">" +
-					      "Resident: " + daemonInfo.residentSizeMB + " MB, Virtual: " + daemonInfo.virtualSizeMB +
-					      " MB, CPU: " + daemonInfo.cpuPercentage + "%" + "</span>";
+					      "Resident: " + daemonInfo.residentSizeMB + " MB" + virtual +
+					       cpuPercentage + "</span>";
 		}
 
 		// TODO: what if ZCash directory is non-default...
@@ -422,6 +426,9 @@ public class DashboardPanel
 			percentage = df.format(dPercentage);
 		}
 		
+		// Also set a member that may be queried
+		this.blockchainPercentage = new Integer(new Double(percentage).intValue());
+		
 		// Just in case early on the call returns some junk date
 		if (info.lastBlockDate.before(startDate))
 		{
@@ -432,8 +439,9 @@ public class DashboardPanel
 		String connections = " \u26D7";
 		String tickSymbol = " \u2705";
 		OS_TYPE os = OSUtil.getOSType();
-		// Handling special symbols on Mac OS
-		if (os == OS_TYPE.MAC_OS)
+		// Handling special symbols on Mac OS/Windows 
+		// TODO: isolate OS-specific symbol stuff in separate code
+		if ((os == OS_TYPE.MAC_OS) || (os == OS_TYPE.WINDOWS))
 		{
 			connections = " \u21D4";
 			tickSymbol = " \u2606";
@@ -623,6 +631,20 @@ public class DashboardPanel
 			}
 		});
 
+		
+		// Confirmation symbols
+		String confirmed    = "\u2690";
+		String notConfirmed = "\u2691";
+		
+		// Windows does not support the flag symbol (Windows 7 by default)
+		// TODO: isolate OS-specific symbol codes in a separate class
+		OS_TYPE os = OSUtil.getOSType();
+		if (os == OS_TYPE.WINDOWS)
+		{
+			confirmed = " \u25B7";
+			notConfirmed = " \u25B6";
+		}
+
 		DecimalFormat df = new DecimalFormat("########0.00######");
 		
 		// Change the direction and date etc. attributes for presentation purposes
@@ -669,7 +691,7 @@ public class DashboardPanel
 			{
 				boolean isConfirmed = !trans[2].trim().equals("0"); 
 				
-				trans[2] = isConfirmed ? "Yes \u2690" : "No  \u2691";
+				trans[2] = isConfirmed ? ("Yes " + confirmed) : ("No  " + notConfirmed);
 			} catch (NumberFormatException nfe)
 			{
 				System.out.println("Error occurred while formatting confirmations: " + trans[2] + 

@@ -48,7 +48,7 @@ public class OSUtil
 	};
 	
 	
-	public boolean isUnixLike(OS_TYPE os)
+	public static boolean isUnixLike(OS_TYPE os)
 	{
 		return os == OS_TYPE.LINUX || os == OS_TYPE.MAC_OS || os == OS_TYPE.FREE_BSD || 
 			   os == OS_TYPE.OTHER_BSD || os == OS_TYPE.SOLARIS || os == OS_TYPE.AIX || 
@@ -56,7 +56,7 @@ public class OSUtil
 	}
 	
 	
-	public boolean isHardUnix(OS_TYPE os)
+	public static boolean isHardUnix(OS_TYPE os)
 	{
 		return os == OS_TYPE.FREE_BSD || 
 			   os == OS_TYPE.OTHER_BSD || os == OS_TYPE.SOLARIS || 
@@ -99,6 +99,37 @@ public class OSUtil
 	}
 
 
+	// Returns the name of the zcashd server - may vary depending on the OS.
+	public static String getZCashd()
+	{
+		String zcashd = "zcashd";
+		
+		OS_TYPE os = getOSType();
+		if (os == OS_TYPE.WINDOWS)
+		{
+			zcashd += ".exe";
+		}
+		
+		return zcashd;
+	}
+	
+	
+	// Returns the name of the zcash-cli tool - may vary depending on the OS.
+	public static String getZCashCli()
+	{
+		String zcashcli = "zcash-cli";
+		
+		OS_TYPE os = getOSType();
+		if (os == OS_TYPE.WINDOWS)
+		{
+			zcashcli += ".exe";
+		}
+		
+		return zcashcli;
+	}
+
+
+	// Returns the directory that the wallet program was started from
 	public static String getProgramDirectory()
 		throws IOException
 	{
@@ -117,6 +148,7 @@ public class OSUtil
 			}
 		}
 
+		// Current dir of the running JVM (expected)
 		String userDir = System.getProperty("user.dir");
 		if (userDir != null)
 		{
@@ -134,6 +166,13 @@ public class OSUtil
 	}
 
 
+	public static File getUserHomeDirectory()
+		throws IOException
+	{
+        return new File(System.getProperty("user.home"));
+	}
+
+
 	public static String getBlockchainDirectory()
 		throws IOException
 	{
@@ -141,7 +180,10 @@ public class OSUtil
 		
 		if (os == OS_TYPE.MAC_OS)
 		{
-			return new File(System.getProperty("user.home") + "/Library/Application Support/zclassic").getCanonicalPath();
+			return new File(System.getProperty("user.home") + "/Library/Application Support/Zclassic").getCanonicalPath();
+		} else if (os == OS_TYPE.WINDOWS)
+		{
+			return new File(System.getenv("APPDATA") + "\\Zclassic").getCanonicalPath();
 		} else
 		{
 			return new File(System.getProperty("user.home") + "/.zclassic").getCanonicalPath();
@@ -153,10 +195,27 @@ public class OSUtil
 	public static String getSettingsDirectory()
 		throws IOException
 	{
-		File dir = new File(System.getProperty("user.home") + "/.ZClassicSwingWalletUI");
+	    File userHome = new File(System.getProperty("user.home"));
+	    File dir;
+	    OS_TYPE os = getOSType();
+	    
+	    if (os == OS_TYPE.MAC_OS)
+	    {
+	        dir = new File(userHome, "Library/Application Support/ZClassicSwingWalletUI");
+	    } else if (os == OS_TYPE.WINDOWS)
+		{
+			dir = new File(System.getenv("LOCALAPPDATA") + "\\ZClassicSwingWalletUI");
+		} else
+	    {
+	        dir = new File(userHome.getCanonicalPath() + File.separator + ".ZClassicSwingWalletUI");
+	    }
+	    
 		if (!dir.exists())
 		{
-			dir.mkdirs();
+			if (!dir.mkdirs())
+			{
+				System.out.println("WARNING: Could not create settings directory: " + dir.getCanonicalPath());
+			}
 		}
 
 		return dir.getCanonicalPath();
@@ -173,6 +232,10 @@ public class OSUtil
 			CommandExecutor uname = new CommandExecutor(new String[] { "uname", "-sr" });
 		    return uname.execute() + "; " + 
 		           System.getProperty("os.name") + " " + System.getProperty("os.version");
+		} else if (os == OS_TYPE.WINDOWS)
+		{
+			// TODO: More detailed Windows information
+			return System.getProperty("os.name");
 		} else
 		{
 			CommandExecutor uname = new CommandExecutor(new String[] { "uname", "-srv" });
@@ -181,11 +244,29 @@ public class OSUtil
 	}
 
 
-	// Can be used to find zcashd/zcash-cli
+	// Can be used to find zcashd/zcash-cli if it is not found in the same place as the wallet JAR
 	// Null if not found
 	public static File findZCashCommand(String command)
 		throws IOException
 	{
+	    File f;
+	    
+	    // Try with system property zcash.location.dir - may be specified by caller
+	    String ZCashLocationDir = System.getProperty("zclassic.location.dir");
+	    if ((ZCashLocationDir != null) && (ZCashLocationDir.trim().length() > 0))
+	    {
+	        f = new File(ZCashLocationDir + File.separator + command);
+	        if (f.exists() && f.isFile())
+	        {
+	            return f.getCanonicalFile();
+	        }
+	    }
+	    
+	    OS_TYPE os = getOSType();
+	    
+	    if (isUnixLike(os))
+	    {
+	    	// The following search directories apply to UNIX-like systems only
 		final String dirs[] = new String[]
 		{
 			"/usr/bin/", // Typical Ubuntu
@@ -200,15 +281,37 @@ public class OSUtil
 
 		for (String d : dirs)
 		{
-			File f = new File(d + command);
+				f = new File(d + command);
 			if (f.exists())
 			{
 				return f;
 			}
 		}
 		
+	    } else if (os == OS_TYPE.WINDOWS)
+	    {
+	    	// A probable Windows directory is a ZCash dir in Program Files
+	    	String programFiles = System.getenv("PROGRAMFILES");
+	    	if ((programFiles != null) && (!programFiles.isEmpty()))
+	    	{
+	    		File pf = new File(programFiles);
+	    		if (pf.exists() && pf.isDirectory())
+	    		{
+	    			File ZDir = new File(pf, "Zclassic");
+	    			if (ZDir.exists() && ZDir.isDirectory())
+	    			{
+	    				File cf = new File(ZDir, command);
+	    				if (cf.exists() && cf.isFile())
+	    				{
+	    					return cf;
+	    				}
+	    			}
+	    		}
+	    	}
+	    }
+		
 		// Try in the current directory
-		File f = new File("." + File.separator + command);
+		f = new File("." + File.separator + command);
 		if (f.exists() && f.isFile())
 		{
 			return f.getCanonicalFile();
