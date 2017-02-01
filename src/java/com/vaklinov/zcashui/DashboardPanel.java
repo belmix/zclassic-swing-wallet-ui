@@ -122,7 +122,7 @@ public class DashboardPanel
 			this.getClass().getClassLoader().getResource("images/Z-yellow.orange-logo-small.png")));
 		tempPanel.add(logoLabel);
 		//tempPanel.add(new JLabel(" "));
-		JLabel zcLabel = new JLabel("Classic Wallet        ");
+		JLabel zcLabel = new JLabel("Classic Wallet     ");
 		zcLabel.setFont(new Font("Helvetica", Font.BOLD | Font.ITALIC, 32));
 		tempPanel.add(zcLabel);
 		tempPanel.setToolTipText("Powered by ZClassic");

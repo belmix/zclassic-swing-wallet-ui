@@ -97,7 +97,7 @@ public class ZCashUI
     public ZCashUI(StartupProgressDialog progressDialog)
         throws IOException, InterruptedException, WalletCallException
     {
-        super("ZClassic Swing Wallet UI 0.58 (beta)");
+        super("ZClassic Swing Wallet UI 0.58.2 (beta)");
         
         if (progressDialog != null)
         {
