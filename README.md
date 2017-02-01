@@ -17,9 +17,9 @@ The details of how to build it are described below (easy to follow).
 
 1. Operating system and tools
 
-   As of November 2016 (ZClassic v1.0.3) this program is only intended to work on Linux 
-   (same limitation as [ZClassic](http://zclassic.org)). Future versions will work on MAC/Windows.  
-   The Linux tools you need to build and run the Wallet GUI are Git, Java (JDK7 or later) and 
+   As of February 2017 (ZClassic v1.0.5) this program is primarily tested on Linux but also supports
+   MacOS/Windows (same limitation as [ZClassic](http://zclassic.org)).   
+   The tools you need to build and run the Wallet GUI are Git, Java (JDK7 or later) and 
    Ant. If using Ubuntu Linux, they may be installed via command: 
    ```
    user@ubuntu:~/build-dir$ sudo apt-get install git default-jdk ant
@@ -61,7 +61,7 @@ The details of how to build it are described below (easy to follow).
    3.1. If you have built ZClassic from source code:
 
    Assuming you have already built from source code [ZClassic](http://zclassic.org) in directory `/home/user/zclassic/src` (for 
-   example - this is the typical build dir. for ZClassic v1.0.0) which contains the command line tools `zcash-cli` 
+   example - this is the typical build dir. for ZClassic v1.0.5) which contains the command line tools `zcash-cli` 
    and `zcashd` you need to take the created file `./build/jars/ZClassicSwingWalletUI.jar` and copy it 
    to diretcory `/home/user/zclassic/src` (the same dir. that contains `zcash-cli` and `zcashd`). Example copy command:
    ```
