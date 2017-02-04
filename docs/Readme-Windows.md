@@ -20,7 +20,7 @@ Before installing the GUI wallet on Windows you need to install ZClassic on Wind
    After downloading the two keys, they should be available in the same directory similar to:
 ![Screenshot](https://github.com/vaklinov/zclassic-swing-wallet-ui/raw/master/docs/ZCashKeyDir.png "ZClassic keys directory on Windows")
 
-   1.5. Create directory `%APPDATA%\ZClassic` and a text file `zclassic.conf` in it with the following content:
+   1.5. Create directory `%APPDATA%\Zclassic` and a text file `zclassic.conf` in it with the following content:
    ```
    addnode=dnsseed.zclassic.org
    addnode=dnsseed.rotorproject.org
@@ -37,7 +37,7 @@ Before installing the GUI wallet on Windows you need to install ZClassic on Wind
    and place it in the same folder as `zcashd.exe` and `zcash-cli.exe`. The result needs to be similar to:
 ![Screenshot](https://github.com/vaklinov/zclassic-swing-wallet-ui/raw/master/docs/ZClassicWinDir.png "ZClassic directory on Windows")
 
-4. Running the installed ZCash GUI wallet
+4. Running the installed ZClassic GUI wallet
 
    The wallet GUI is a Java program packaged as an executable JAR file. It may be run from command line or started from another GUI tool 
    (e.g. file manager). One way to run it from command line is:
@@ -45,12 +45,12 @@ Before installing the GUI wallet on Windows you need to install ZClassic on Wind
    java -jar ZClassicSwingWalletUI.jar
    ```
    You may instead just use Windows the file manager and double-click on the `ZClassicSwingWalletUI.jar`. 
-   This will start the ZCash GUI wallet.
+   This will start the ZClassic GUI wallet.
 
 ### Donations accepted
 This project is non-commercial in nature and developed by volunteers. If you find the GUI
 Wallet useful, please consider making a donation for its further development. Your contribution matters! Donations 
-are accepted at ZCash T address:
+are accepted at ZClassic Z address:
 ```
 zcaTKUNkohUgYj3C5bTapCKRk7JZapPfvCUj7GGBUWuBikx4sWEs5KSyd93b9jnjJnbDxnApyXyfeG482iJ5HzoC7cz6oob
 ```
