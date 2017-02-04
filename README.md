@@ -14,6 +14,9 @@ presents the information in a user-friendly manner.
 **For security reasons it is recommended to always build the GUI wallet program from GitHub**
 **[source](https://github.com/vaklinov/zclassic-swing-wallet-ui/archive/master.zip).**
 The details of how to build it are described below (easy to follow).
+Users who insist on downloading a binary release may instead 
+use [ZClassic Desktop GUI Wallet - binary release 0.58.2-beta](https://github.com/vaklinov/zclassic-swing-wallet-ui/blob/master/docs/Release_0.58.2-beta.md)
+
 
 1. Operating system and tools
 
@@ -82,7 +85,7 @@ The details of how to build it are described below (easy to follow).
    This will start the ZClassic GUI wallet.
 
 ### Donations accepted
-At the present time this project is non-commercial in nature and developed by volunteers. If you find the GUI
+This project is non-commercial in nature and developed by volunteers. If you find the GUI
 Wallet useful, please consider making a donation for its further development. Your contribution matters! Donations 
 are accepted at ZClassic Z address:
 ```
