@@ -67,3 +67,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
+### Known issues and limitations
+
+1. Issue: Wallet versions 0.58 and below, when running on Windows systems with (typically non-western) locales that
+redefine the decimal point in the Windows locale settings, have problems with updating the GUI wallet state. 
+A workaround is to change the Windows [locale settings](https://windows.lbl.gov/software/optics/5-1-2/Optics4.jpg) to have dot as decimal separator.
