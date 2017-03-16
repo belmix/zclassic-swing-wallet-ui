@@ -42,6 +42,7 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.Date;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -97,7 +98,7 @@ public class ZCashUI
     public ZCashUI(StartupProgressDialog progressDialog)
         throws IOException, InterruptedException, WalletCallException
     {
-        super("ZClassic Swing Wallet UI 0.62 (beta)");
+        super("ZClassic Swing Wallet UI 0.62.1 (beta)");
         
         if (progressDialog != null)
         {
@@ -419,13 +420,17 @@ public class ZCashUI
             		// If more than 20 minutes behind in the blockchain - startup in progress
             		if ((System.currentTimeMillis() - info.lastBlockDate.getTime()) > (20 * 60 * 1000))
             		{
+            			System.out.println("Current blockchain synchronization date is"  + 
+            		                       new Date(info.lastBlockDate.getTime()));
             			daemonStartInProgress = true;
             		}
             	}
             } catch (WalletCallException wce)
             {
-                if (wce.getMessage().indexOf("{\"code\":-28") != -1) // Started but not ready
+                if ((wce.getMessage().indexOf("{\"code\":-28") != -1) || // Started but not ready
+                	(wce.getMessage().indexOf("error code: -28") != -1))
                 {
+                	System.out.println("zcashd is currently starting...");
                 	daemonStartInProgress = true;
                 }
             }
@@ -433,7 +438,8 @@ public class ZCashUI
             StartupProgressDialog startupBar = null;
             if ((zcashdInfo.status != DAEMON_STATUS.RUNNING) || (daemonStartInProgress))
             {
-            	System.out.println("zcashd is not runing at the moment or has not started/synchronized 100%...");
+            	System.out.println(
+            		"zcashd is not runing at the moment or has not started/synchronized 100% - showing splash...");
 	            startupBar = new StartupProgressDialog(initialClientCaller);
 	            startupBar.setVisible(true);
 	            startupBar.waitForStartup();
@@ -459,11 +465,8 @@ public class ZCashUI
         {
             wce.printStackTrace();
 
-            if ((wce.getMessage().indexOf("{\"code\":-28,\"message\":\"Verifying blocks")      != -1)  ||
-            	(wce.getMessage().indexOf("{\"code\":-28,\"message\":\"Rescanning")            != -1)  ||
-            	(wce.getMessage().indexOf("{\"code\":-28,\"message\":\"Loading wallet")        != -1)  ||
-            	(wce.getMessage().indexOf("{\"code\":-28,\"message\":\"Activating best chain") != -1)  ||
-            	(wce.getMessage().indexOf("{\"code\":-28,\"message\":\"Loading addresses")     != -1))
+            if ((wce.getMessage().indexOf("{\"code\":-28,\"message\"") != -1) ||
+            	(wce.getMessage().indexOf("error code: -28") != -1))
             {
                 JOptionPane.showMessageDialog(
                         null,

@@ -31,6 +31,8 @@ package com.vaklinov.zcashui;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.LineNumberReader;
+import java.io.StringReader;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
@@ -165,22 +167,36 @@ public class ZCashClientCaller
 	            new String[] { zcashcli.getCanonicalPath(), "getinfo"} );
 	    String info = infoGetter.execute();
 	    
-	    if (info.trim().equals("error: couldn't connect to server"))
+	    if (info.trim().toLowerCase(Locale.ROOT).equals("error: couldn't connect to server"))
 	    {
 	    	throw new IOException(info.trim());
 	    }
 	    
-	    if (info.startsWith("error: "))
+	    if (info.trim().toLowerCase(Locale.ROOT).startsWith("error: "))
 	    {
 	        info = info.substring(7);
-	    }
 	    
 	    try 
 	    {
 	        return Json.parse(info).asObject();
 	    } catch (ParseException pe)
 	    {
+		    	System.out.println("unexpected daemon info: " + info);
 	        throw new IOException(pe);
+	    }
+	    } else if (info.trim().toLowerCase(Locale.ROOT).startsWith("error code:"))
+	    {
+	    	return Util.getJsonErrorMessage(info);
+	    } else
+	    {
+		    try 
+		    {
+		        return Json.parse(info).asObject();
+		    } catch (ParseException pe)
+		    {
+		    	System.out.println("unexpected daemon info: " + info);
+		        throw new IOException(pe);
+	        }
 	    }
 	}
 
@@ -489,7 +505,8 @@ public class ZCashClientCaller
 	    CommandExecutor caller = new CommandExecutor(sendCashParameters);
 	    String strResponse = caller.execute();
 
-		if (strResponse.trim().startsWith("error:"))
+		if (strResponse.trim().toLowerCase(Locale.ROOT).startsWith("error:") ||
+			strResponse.trim().toLowerCase(Locale.ROOT).startsWith("error code:"))
 		{
 		  	throw new WalletCallException("Error response from wallet: " + strResponse);
 		}
@@ -627,7 +644,7 @@ public class ZCashClientCaller
     	 {
     		 // If it could be locked with no result - obviously encrypted
     		 return true;
-    	 } else if (strResult.trim().startsWith("error:"))
+    	 } else if (strResult.trim().toLowerCase(Locale.ROOT).startsWith("error:"))
     	 {
     		 // Expecting an error of an unencrypted wallet
     		 String jsonPart = strResult.substring(strResult.indexOf("{"));
@@ -650,6 +667,18 @@ public class ZCashClientCaller
    			 {
    	    		 throw new WalletCallException("Unexpected response from wallet: " + strResult);
    			 }
+    	 } else if (strResult.trim().toLowerCase(Locale.ROOT).startsWith("error code:"))
+    	 {
+   			 JsonObject respObject = Util.getJsonErrorMessage(strResult);
+   			 if ((respObject.getDouble("code", -1) == -15) &&
+   				 (respObject.getString("message", "ERR").indexOf("unencrypted wallet") != -1))
+   			 {
+   				 // Obviously unencrupted
+   				 return false;
+    	     } else
+    	     {
+    		     throw new WalletCallException("Unexpected response from wallet: " + strResult);
+    	     }
     	 } else
     	 {
     		 throw new WalletCallException("Unexpected response from wallet: " + strResult);
@@ -744,7 +773,7 @@ public class ZCashClientCaller
 		}
 		
 		// Obviously we have an error trying to import a Z key
-		if (strResult.trim().toLowerCase().startsWith("error:"))
+		if (strResult.trim().toLowerCase(Locale.ROOT).startsWith("error:"))
 		{
    		 	 // Expecting an error of a T address key
    		 	 String jsonPart = strResult.substring(strResult.indexOf("{"));
@@ -766,6 +795,17 @@ public class ZCashClientCaller
   			 {
   	    		 throw new WalletCallException("Unexpected response from wallet: " + strResult);
   			 }
+		} else if (strResult.trim().toLowerCase(Locale.ROOT).startsWith("error code:"))
+		{
+ 			 JsonObject respObject = Util.getJsonErrorMessage(strResult);
+ 			 if ((respObject.getDouble("code", +123) == -1) &&
+ 				 (respObject.getString("message", "ERR").indexOf("wrong network type") != -1))
+ 			 {
+ 				 // Obviously T address - do nothing here
+ 			 } else
+ 			 {
+ 	    		 throw new WalletCallException("Unexpected response from wallet: " + strResult);
+ 			 }
 		} else
 		{
 			throw new WalletCallException("Unexpected response from wallet: " + strResult);
@@ -879,7 +919,8 @@ public class ZCashClientCaller
 	    CommandExecutor caller = new CommandExecutor(params);
 
 		String strResponse = caller.execute();
-		if (strResponse.trim().startsWith("error:"))
+		if (strResponse.trim().toLowerCase(Locale.ROOT).startsWith("error:")       ||
+			strResponse.trim().toLowerCase(Locale.ROOT).startsWith("error code:"))
 		{
 		  	throw new WalletCallException("Error response from wallet: " + strResponse);
 		}
