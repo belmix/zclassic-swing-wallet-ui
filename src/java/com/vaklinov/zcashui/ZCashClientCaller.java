@@ -167,7 +167,7 @@ public class ZCashClientCaller
 	            new String[] { zcashcli.getCanonicalPath(), "getinfo"} );
 	    String info = infoGetter.execute();
 	    
-	    if (info.trim().toLowerCase(Locale.ROOT).equals("error: couldn't connect to server"))
+	    if (info.trim().toLowerCase(Locale.ROOT).startsWith("error: couldn't connect to server"))
 	    {
 	    	throw new IOException(info.trim());
 	    }
