@@ -92,6 +92,11 @@ are accepted at ZClassic Z address:
 ```
 zcaTKUNkohUgYj3C5bTapCKRk7JZapPfvCUj7GGBUWuBikx4sWEs5KSyd93b9jnjJnbDxnApyXyfeG482iJ5HzoC7cz6oob
 ```
+or T address:
+```
+t1Ja4g7cERDhQVNhsMMNZ49Pm7i2hjDXUuV
+```
+
 
 ### License
 This program is distributed under an [MIT License](https://github.com/vaklinov/zclassic-swing-wallet-ui/raw/master/LICENSE).
