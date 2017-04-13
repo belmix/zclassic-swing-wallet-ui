@@ -7,14 +7,14 @@ Before installing the GUI wallet on Windows you need to install ZEN on Windows.
 
 1. Installing ZClassic on Windows
 
-   1.1. Download the ZClassic node [zclassic-Windows-NoGUI-v1.0.5.zip](https://github.com/z-classic/zclassic/releases/download/v1.0.5a/zclassic-Windows-NoGUI-v1.0.5.zip)
+   1.1. Download the ZEN node [Zen-Windows-NoGUI-v1.0.5.zip](https://github.com/z-classic/zclassic/releases/download/v1.0.5a/zclassic-Windows-NoGUI-v1.0.5.zip)
 
-   1.2. Unzip the file so that the executables `zen.exe` and `zen-cli.exe` are in one directory.
+   1.2. Unzip the file so that the executables `zend.exe` and `zen-cli.exe` are in one directory.
    
-   1.3. Download the [ZClassic Proving Key](https://z.cash/downloads/sprout-proving.key)
+   1.3. Download the [ZEN Proving Key](https://z.cash/downloads/sprout-proving.key)
         and store it in directory `%APPDATA%\ZcashParams`.
         
-   1.4. Download the [ZClassic Verifying Key](https://z.cash/downloads/sprout-verifying.key)
+   1.4. Download the [ZEN Verifying Key](https://z.cash/downloads/sprout-verifying.key)
         and store it in directory `%APPDATA%\ZcashParams`.
         
    After downloading the two keys, they should be available in the same directory similar to:
@@ -34,7 +34,7 @@ Before installing the GUI wallet on Windows you need to install ZEN on Windows.
 
    2.2. You may use the [latest binary release of the ZClassic Desktop GUI wallet](https://github.com/vaklinov/zclassic-swing-wallet-ui/releases/latest).
    Download file [ZClassicSwingWalletUI.jar](https://github.com/vaklinov/zclassic-swing-wallet-ui/releases/download/0.58.2-beta/ZClassicSwingWalletUI.jar)
-   and place it in the same folder as `zcashd.exe` and `zcash-cli.exe`. The result needs to be similar to:
+   and place it in the same folder as `zend.exe` and `zen-cli.exe`. The result needs to be similar to:
 ![Screenshot](https://github.com/vaklinov/zclassic-swing-wallet-ui/raw/master/docs/ZClassicWinDir.png "ZEN directory on Windows")
 
 4. Running the installed ZEN GUI wallet
