@@ -99,10 +99,10 @@ public class OSUtil
 	}
 
 
-	// Returns the name of the zcashd server - may vary depending on the OS.
+	// Returns the name of the zend server - may vary depending on the OS.
 	public static String getZCashd()
 	{
-		String zcashd = "zcashd";
+		String zcashd = "zend";
 		
 		OS_TYPE os = getOSType();
 		if (os == OS_TYPE.WINDOWS)
@@ -114,10 +114,10 @@ public class OSUtil
 	}
 	
 	
-	// Returns the name of the zcash-cli tool - may vary depending on the OS.
+	// Returns the name of the zen-cli tool - may vary depending on the OS.
 	public static String getZCashCli()
 	{
-		String zcashcli = "zcash-cli";
+		String zcashcli = "zen-cli";
 		
 		OS_TYPE os = getOSType();
 		if (os == OS_TYPE.WINDOWS)
@@ -244,7 +244,7 @@ public class OSUtil
 	}
 
 
-	// Can be used to find zcashd/zcash-cli if it is not found in the same place as the wallet JAR
+	// Can be used to find zend/zen-cli if it is not found in the same place as the wallet JAR
 	// Null if not found
 	public static File findZCashCommand(String command)
 		throws IOException
