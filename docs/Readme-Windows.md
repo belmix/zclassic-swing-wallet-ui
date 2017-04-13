@@ -5,7 +5,7 @@ Before installing the GUI wallet on Windows you need to install ZEN on Windows.
 
 ![Screenshot](https://github.com/vaklinov/zclassic-swing-wallet-ui/raw/master/docs/ZClassicWalletWindows.png "ZEN Wallet for Windows")
 
-1. Installing ZClassic on Windows
+1. Installing ZEN on Windows
 
    1.1. Download the ZEN node [Zen-Windows-NoGUI-v1.0.5.zip](https://github.com/z-classic/zclassic/releases/download/v1.0.5a/zclassic-Windows-NoGUI-v1.0.5.zip)
 
@@ -28,7 +28,7 @@ Before installing the GUI wallet on Windows you need to install ZEN on Windows.
    rpcpassword=SomePassword_PleaseChangeThisValue   
    ```
 
-2. Installing the ZClassic Desktop GUI wallet
+2. Installing the ZEN Desktop GUI wallet
 
    2.1. Install JDK 8 for Windows - e.g. [use this good tutorial](http://www.wikihow.com/Install-the-Java-Software-Development-Kit)
 
@@ -42,17 +42,17 @@ Before installing the GUI wallet on Windows you need to install ZEN on Windows.
    The wallet GUI is a Java program packaged as an executable JAR file. It may be run from command line or started from another GUI tool 
    (e.g. file manager). One way to run it from command line is:
    ```
-   java -jar ZClassicSwingWalletUI.jar
+   java -jar ZENSwingWalletUI.jar
    ```
-   You may instead just use Windows the file manager and double-click on the `ZClassicSwingWalletUI.jar`. 
-   This will start the ZClassic GUI wallet.
+   You may instead just use Windows the file manager and double-click on the `ZENSwingWalletUI.jar`. 
+   This will start the ZEN GUI wallet.
 
 ### Donations accepted
 This project is non-commercial in nature and developed by volunteers. If you find the GUI
 Wallet useful, please consider making a donation for its further development. Your contribution matters! Donations 
-are accepted at ZClassic Z address:
+are accepted at ZEN Z address:
 ```
-zcaTKUNkohUgYj3C5bTapCKRk7JZapPfvCUj7GGBUWuBikx4sWEs5KSyd93b9jnjJnbDxnApyXyfeG482iJ5HzoC7cz6oob
+
 ```
 
 ### License
