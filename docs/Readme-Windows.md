@@ -9,7 +9,7 @@ Before installing the GUI wallet on Windows you need to install ZClassic on Wind
 
    1.1. Download the ZClassic node [zclassic-Windows-NoGUI-v1.0.5.zip](https://github.com/z-classic/zclassic/releases/download/v1.0.5a/zclassic-Windows-NoGUI-v1.0.5.zip)
 
-   1.2. Unzip the file so that the executables `zcashd.exe` and `zcash-cli.exe` are in one directory.
+   1.2. Unzip the file so that the executables `zen.exe` and `zen-cli.exe` are in one directory.
    
    1.3. Download the [ZClassic Proving Key](https://z.cash/downloads/sprout-proving.key)
         and store it in directory `%APPDATA%\ZcashParams`.
@@ -20,7 +20,7 @@ Before installing the GUI wallet on Windows you need to install ZClassic on Wind
    After downloading the two keys, they should be available in the same directory similar to:
 ![Screenshot](https://github.com/vaklinov/zclassic-swing-wallet-ui/raw/master/docs/ZCashKeyDir.png "ZClassic keys directory on Windows")
 
-   1.5. Create directory `%APPDATA%\Zclassic` and a text file `zclassic.conf` in it with the following content:
+   1.5. Create directory `%APPDATA%\Zen` and a text file `zen.conf` in it with the following content:
    ```
    addnode=dnsseed.zclassic.org
    addnode=dnsseed.rotorproject.org
