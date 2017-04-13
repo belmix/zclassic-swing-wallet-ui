@@ -1,9 +1,9 @@
-# [ZClassic](http://zclassic.org) Desktop GUI Wallet - for Windows
+# [ZClassic](https://zencash.io/) Desktop GUI Wallet - for Windows
 
-The [ZClassic](http://zclassic.org) development team has released a [version for Windows](https://github.com/z-classic/zclassic/releases/tag/v1.0.5a).
-Before installing the GUI wallet on Windows you need to install ZClassic on Windows.
+The [ZEN](https://zencash.io/) development team has released a [version for Windows](https://github.com/z-classic/zclassic/releases/tag/v1.0.5a).
+Before installing the GUI wallet on Windows you need to install ZEN on Windows.
 
-![Screenshot](https://github.com/vaklinov/zclassic-swing-wallet-ui/raw/master/docs/ZClassicWalletWindows.png "ZClassic Wallet for Windows")
+![Screenshot](https://github.com/vaklinov/zclassic-swing-wallet-ui/raw/master/docs/ZClassicWalletWindows.png "ZEN Wallet for Windows")
 
 1. Installing ZClassic on Windows
 
@@ -35,9 +35,9 @@ Before installing the GUI wallet on Windows you need to install ZClassic on Wind
    2.2. You may use the [latest binary release of the ZClassic Desktop GUI wallet](https://github.com/vaklinov/zclassic-swing-wallet-ui/releases/latest).
    Download file [ZClassicSwingWalletUI.jar](https://github.com/vaklinov/zclassic-swing-wallet-ui/releases/download/0.58.2-beta/ZClassicSwingWalletUI.jar)
    and place it in the same folder as `zcashd.exe` and `zcash-cli.exe`. The result needs to be similar to:
-![Screenshot](https://github.com/vaklinov/zclassic-swing-wallet-ui/raw/master/docs/ZClassicWinDir.png "ZClassic directory on Windows")
+![Screenshot](https://github.com/vaklinov/zclassic-swing-wallet-ui/raw/master/docs/ZClassicWinDir.png "ZEN directory on Windows")
 
-4. Running the installed ZClassic GUI wallet
+4. Running the installed ZEN GUI wallet
 
    The wallet GUI is a Java program packaged as an executable JAR file. It may be run from command line or started from another GUI tool 
    (e.g. file manager). One way to run it from command line is:
