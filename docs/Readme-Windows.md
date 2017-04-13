@@ -1,4 +1,4 @@
-# [ZClassic](https://zencash.io/) Desktop GUI Wallet - for Windows
+# [ZEN](https://zencash.io/) Desktop GUI Wallet - for Windows
 
 The [ZEN](https://zencash.io/) development team has released a [version for Windows](https://github.com/z-classic/zclassic/releases/tag/v1.0.5a).
 Before installing the GUI wallet on Windows you need to install ZEN on Windows.
